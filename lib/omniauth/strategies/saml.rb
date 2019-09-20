@@ -68,7 +68,7 @@ module OmniAuth
       def response_fingerprint
         response = request.params["SAMLResponse"]
         response = (response =~ /^</) ? response : Base64.decode64(response)
-        $stdout.puts response
+        $stdout.puts response.inspect
         document = XMLSecurity::SignedDocument::new(response)
         cert_element = REXML::XPath.first(document, "//ds:X509Certificate", { "ds"=> 'http://www.w3.org/2000/09/xmldsig#' })
         base64_cert = cert_element.text
@@ -148,7 +148,7 @@ module OmniAuth
 
       def handle_response(raw_response, opts, settings)
         response = OneLogin::RubySaml::Response.new(raw_response, opts.merge(settings: settings))
-        $stdout.puts response
+        $stdout.puts response.inspect
         response.attributes["fingerprint"] = settings.idp_cert_fingerprint
         response.soft = false
 
