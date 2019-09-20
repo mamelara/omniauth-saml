@@ -68,6 +68,7 @@ module OmniAuth
       def response_fingerprint
         response = request.params["SAMLResponse"]
         response = (response =~ /^</) ? response : Base64.decode64(response)
+        $stdout.puts response
         document = XMLSecurity::SignedDocument::new(response)
         cert_element = REXML::XPath.first(document, "//ds:X509Certificate", { "ds"=> 'http://www.w3.org/2000/09/xmldsig#' })
         base64_cert = cert_element.text
